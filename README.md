@@ -1,10 +1,8 @@
 # 3ds-anmboot
 
-Animated Nintendo 3DS software-launch logo boot wrapper with concurrent Luma3DS loading and a stock-style handoff.
+Animated Nintendo 3DS software-launch logo boot wrapper with concurrent Luma3DS loading.
 
-Current release: **v1.23 (Final)**
-
-## Installation / Usage
+## Installation
 
 `3ds-anmboot` sits in front of Luma3DS. The SD card root `boot.firm` becomes 3ds-anmboot, while the original Luma3DS `boot.firm` is moved into `/anmboot/`.
 
@@ -14,7 +12,7 @@ Current release: **v1.23 (Final)**
    anmboot
    ```
 
-2. Take your **original Luma3DS `boot.firm`** and place it inside that folder as:
+2. Take your original `boot.firm` and place it inside that folder as:
 
    ```text
    /anmboot/boot.firm
@@ -26,7 +24,7 @@ Current release: **v1.23 (Final)**
    boot.firm
    ```
 
-4. Put that renamed file in the **root of the SD card**:
+4. Put that renamed file in the root of the SD card:
 
    ```text
    /boot.firm
@@ -71,18 +69,12 @@ Output:
 - `arm11/official_glow.bin` from the original BCLIM/BCLYT/BCLAN data in `tools/official_assets/`
 - `arm11/three_bank.bin` and `arm11/three_bank.h` from the native logo assets/animation tables
 
-This is intentional: the source archive does not rely on stale generated blobs or the old incorrectly decoded PNG copies.
 
 ## Behavior
 
 - Loads Luma from `/anmboot/boot.firm`.
-- Runs the logo animation while Luma performs its ARM9-side startup work.
-- Uses the corrected raw-BCLIM glow decode and stock-matching wave lifetime/tail behavior.
-- Stops spawning new waves at handoff and lets existing waves travel/fade naturally.
-- Uses the pre-baked red `3` scaler to avoid expensive runtime division.
-- Avoids modifying the actively scanned framebuffer during handoff.
-- Keeps the bottom-screen Nintendo logo at original size and visually centered.
 - Preserves normal Luma boot-key behavior by falling back to Luma's own ARM11 helper when boot keys are held.
+- When using chainloader to map other firms like `X_luma13.3.firm` `B_open_agb_firm.firm`, the boot screen will not be displayed.
 
 ## Source layout
 
@@ -94,7 +86,3 @@ tools/                offline animation-bank generators and FIRM packer
 tools/official_assets canonical first-party layout/animation/BCLIM inputs
 docs/                 reverse-engineering notes retained for reference
 ```
-
-## Notes
-
-This source tree intentionally excludes historical `.firm` builds, compiler intermediates, preview images, Python caches, and deprecated test scripts. See `NOTICE` for upstream/reference acknowledgements and asset provenance notes.
