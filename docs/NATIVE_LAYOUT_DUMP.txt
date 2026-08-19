@@ -1,0 +1,38 @@
+NintendoLogo_U_00.bclyt (parsed from the supplied first-party logo.bin)
+
+RootPane 400x240
+└─ N_W_00 32x32 @ (0,0)
+   ├─ P_Red_00 400x240
+   │  └─ P_Blk_00 400x240
+   ├─ P_Red_01 400x240
+   │  └─ P_Blk_01 400x240
+   ├─ P_Red_02 400x240
+   │  └─ P_Blk_02 400x240
+   ├─ P_3_00   translate=(31,0,-5), size=36x32, origin=center
+   │            texture=3dsLogo_02.bclim
+   │            UV=(0.203125,0)..(0.765625,1)
+   │            => exact source crop x=13..48 from the 64x32 A4 texture
+   ├─ P_Nin_00 translate=(0,0,-5), size=128x16, origin=right/bottom
+   │  ├─ P_O_T_00 size=32x16, origin=center/bottom, texture=3dsLogo_01
+   │  └─ P_O_B_00 size=32x16, origin=center/top, texture=3dsLogo_01
+   │               V is flipped: (0,1)..(1,0), material gray=140
+   └─ P_Ds_00  translate=(0,0,-5), size=128x32, origin=left/center
+
+Static screen placement (400x240, center 200,120):
+P_Nin_00: x=72..199, y=104..119
+P_O_T_00: x=184..215, y=104..119
+P_O_B_00: x=184..215, y=120..135, V-flipped
+P_3_00: center=(231,120), native pane 36x32
+P_Ds_00: x=200..327, y=104..135
+
+NintendoLogo_D_00.bclyt:
+RootPane 320x240
+└─ N_Root_00 40x40
+   └─ P_NinLogo_00 translate=(0,-120,0), size=128x64, origin=center/bottom
+      => framebuffer x=96, y=176
+
+Animation:
+SceneOutA: PAI frameSize=60, loop=false
+SceneOutB: PAI frameSize=30, loop=true (boot FIRM intentionally plays exactly one loop)
+SceneOutC: PAI frameSize=15, loop=false
+All per-frame values in native_anim.c are evaluated from the original Hermite keys.

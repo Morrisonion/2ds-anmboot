@@ -1,0 +1,7 @@
+This experimental project references/derives low-level implementation ideas from:
+- BAX by Wolfvak / MechanicalDragon0687 (GPLv3 repository mirror/source)
+- Normmatt SDMMC code as carried by BAX (MPL-2.0 or GPL-2.0+ notice in upstream)
+- Luma3DS protocol/layout behavior (GPLv3 source; no Luma source is embedded wholesale here)
+
+The compact logo alpha-mask assets in arm11/assets.c were generated from a first-party Nintendo
+3DS software-launch logo.bin supplied by the device owner for private testing.

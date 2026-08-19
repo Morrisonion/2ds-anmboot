@@ -1,0 +1,11 @@
+/build/
+*.firm
+/official_glow_preview.png
+/official_glow_with_logo_preview.png
+/three_bank_preview.png
+/arm11/official_glow.bin
+/arm11/three_bank.bin
+/arm11/three_bank.h
+__pycache__/
+*.pyc
+.DS_Store
