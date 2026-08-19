@@ -76,8 +76,9 @@ arm11_firmstub_start:
        registers. Each duty update is issued in the middle of the PDC VBlank
        window (0x192..0x196), not on its leading edge, to avoid a left/right
        brightness split on a frame.  At alpha=0, clear both retained framebuffer sets while the
-       backlight is dark, restore the exact original duty values, and only then
-       enter NATIVE ARM11.  Luma itself is never modified. */
+       backlight is dark, keep both panels dark for two full VBlanks, and only
+       then enter NATIVE ARM11. NATIVE/HOME restores brightness when its display
+       stack is ready. Luma itself is never modified. */
     str r0, [r1]
     mov r0, #0x20000000
 4:
@@ -175,14 +176,38 @@ arm11_firmstub_start:
     tst r3, #1
     bne 13b
 
-    /* Restore only the top backlight here.  Restoring the bottom duty while
-       its retained framebuffer is already black produced a visible grey/bright
-       flash on real hardware.  Keep the bottom at zero and let NATIVE/HOME turn
-       it back on only when the system display stack has valid lower-screen
-       content ready. */
-    str r9, [r4]
+    /* Keep BOTH backlights dark after the framebuffer clear.  v1.22 already
+       proved this is the clean handoff for the lower panel.  Restoring the top
+       duty immediately after the clear could illuminate LCD response / an old
+       scanline before a full black frame had traversed the panel; the large white
+       DS glyphs made that residual most visible in video.
+
+       Wait two complete VBlanks while both panels are dark so black has really
+       scanned across both LCDs, then enter NATIVE.  NATIVE/HOME will restore the
+       panel duties when its own display stack has valid content ready. */
     mov r0, #0
+    str r0, [r4]
     str r0, [r5]
+
+    ldr r4, =0x10400454      /* PDC0 VCount */
+    ldr r5, =0x192
+    mov r6, #2
+14:
+15:
+    ldr r7, [r4]
+    lsl r7, r7, #20
+    lsr r7, r7, #20
+    cmp r7, r5
+    bhs 15b
+16:
+    ldr r7, [r4]
+    lsl r7, r7, #20
+    lsr r7, r7, #20
+    cmp r7, r5
+    blo 16b
+    subs r6, r6, #1
+    bne 14b
+
     bx r8
 
 12:
