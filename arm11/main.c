@@ -90,6 +90,21 @@ void arm11_main(void){
         gfx_draw_intro_frame(f);
     }
 
+#ifdef ANMBOOT_OLD3DS
+    /* Old 3DS light mode: Scene A already contains the complete lightweight red
+       "3" landing animation.  There is no glow bank at all.  If ARM9/Luma is
+       still loading after frame 59, keep the final logo on-screen and merely
+       service the mailbox once per VBlank; do not redraw static pixels. */
+    while(!prep_seen){
+        check_error();
+        int r=service_luma();
+        if(r==1)prep_seen=1;
+        else if(r<0){gfx_error(LOAD_ERR_COMPAT);while(1)__asm__ volatile("wfi");}
+        if(!prep_seen)gfx_idle_vblank();
+    }
+    gfx_seal_static_logo();
+    finish_into_native();
+#else
     /* Scene B is the wait indicator. Keep one complete 30-frame loop visible
        to match the approved official-timeline preview. After that, keep looping only while
        stock Luma ARM9 has not reached PREPARE. */
@@ -118,4 +133,5 @@ void arm11_main(void){
     }
     gfx_seal_static_logo();
     finish_into_native();
+#endif
 }

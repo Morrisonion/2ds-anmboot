@@ -52,16 +52,23 @@ Requirements:
 - LLD
 - `llvm-objcopy`
 
-Build from the project root:
+Build the standard version from the project root:
 
 ```sh
 ./build.sh
 ```
 
-Output:
+For **Old 3DS / Old 3DS XL / Old 2DS**, an optional lightweight build removes all red-wave rendering.
+
+```sh
+./build.sh -o
+```
+
+Outputs:
 
 ```text
-3ds-anmboot.firm
+./build.sh      -> 3ds-anmboot.firm
+./build.sh -o   -> 3ds-anmboot-o3ds.firm
 ```
 
 `build.sh` regenerates both runtime animation banks from the canonical source assets before compiling:

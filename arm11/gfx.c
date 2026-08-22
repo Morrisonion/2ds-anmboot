@@ -1,7 +1,9 @@
 #include "gfx.h"
 #include "assets.h"
 #include "native_anim.h"
+#ifndef ANMBOOT_OLD3DS
 #include "official_glow.h"
+#endif
 #include "three_bank.h"
 
 /* Use Luma's own normal bare-metal framebuffer slots. Modern Luma also packs its
@@ -89,6 +91,7 @@ static void draw_baked3(u8 *fb,u32 anim_frame,u8 ga){
     }
 }
 
+#ifndef ANMBOOT_OLD3DS
 /* v1.19: stock-like glow from raw BCLIM, still stored as 200x120 sparse spans.
    Runtime expands only non-zero samples to 2x2 cells. The offline tail now uses
    the real continuing Scene-B motion instead of a global synchronized fade, and
@@ -116,6 +119,8 @@ static void draw_official_glow(u8 *fb,u32 frame_index){
     }
 }
 
+#endif
+
 static void draw_logo(u32 base,const NativeAnimFrame*f,int glow_frame){
     u8*top=(u8*)base,*bot=(u8*)(base+BOTTOM_OFF);
     u32 anim_frame=(u32)(f-native_anim);
@@ -128,7 +133,11 @@ static void draw_logo(u32 base,const NativeAnimFrame*f,int glow_frame){
     int preserve_bottom=(anim_frame>=17u);
     fill_region(base,preserve_bottom?TOP_SIZE:TOTAL_SIZE,0);
 
+#ifndef ANMBOOT_OLD3DS
     if(glow_frame>=0)draw_official_glow(top,(u32)glow_frame);
+#else
+    (void)glow_frame;
+#endif
     u32 na=(u32)f->nin_a*f->root_a/255u,da=(u32)f->ds_a*f->root_a/255u,ta=(u32)f->three_a*f->root_a/255u;
     int nx=q8_round(f->nin_x_q8),dx=q8_round(f->ds_x_q8);
 
@@ -174,9 +183,24 @@ void gfx_seal_static_logo(void){
 }
 
 void gfx_init(void){fill_region(FB_A,TOTAL_SIZE,0);fill_region(FB_B,TOTAL_SIZE,0);setup_bgr8();}
-void gfx_draw_intro_frame(int frame){if(frame<0)frame=0;if(frame>59)frame=59;render(&native_anim[frame],frame);}
+void gfx_draw_intro_frame(int frame){
+    if(frame<0)frame=0;if(frame>59)frame=59;
+#ifdef ANMBOOT_OLD3DS
+    render(&native_anim[frame],-1);
+#else
+    render(&native_anim[frame],frame);
+#endif
+}
+#ifndef ANMBOOT_OLD3DS
 void gfx_draw_glow_frame(int frame_b){if(frame_b<0)frame_b=0;frame_b%=30;render(&native_anim[60],60+frame_b);}
 void gfx_draw_tail_frame(int frame_t){if(frame_t<0)frame_t=0;if(frame_t>44)frame_t=44;render(&native_anim[60],90+frame_t);}
+#else
+void gfx_draw_glow_frame(int frame_b){(void)frame_b;}
+void gfx_draw_tail_frame(int frame_t){(void)frame_t;}
+#endif
+#ifdef ANMBOOT_OLD3DS
+void gfx_idle_vblank(void){wait_one_vblank();}
+#endif
 void gfx_black(void){u32 next=cur^1u;fill_region(next?FB_B:FB_A,TOTAL_SIZE,0);present_vblank(next);}
 void gfx_error(u32 code){
     u8 r=255,g=0,b=0;if(code==0xE2){r=0;g=255;b=0;}else if(code==0xE3){r=0;g=80;b=255;}else if(code==0xE4){r=255;g=220;b=0;}else if(code==0xE5){r=255;g=0;b=255;}
