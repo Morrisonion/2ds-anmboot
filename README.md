@@ -2,6 +2,8 @@
 
 Animated Nintendo 2DS software-launch logo boot wrapper with concurrent Luma3DS loading.
 
+## for **2DS** and **new 2DS XL**
+
 ## Installation
 
 `2ds-anmboot` sits in front of Luma3DS. The SD card root `boot.firm` becomes 2ds-anmboot, while the original Luma3DS `boot.firm` is moved into `/anmboot/`.
@@ -52,24 +54,16 @@ Requirements:
 - LLD
 - `llvm-objcopy`
 
-Build the standard version from the project root:
+Build from the project root:
 
 ```sh
 ./build.sh
 ```
 
-For **Old 3DS / Old 3DS XL / Old 2DS**, an optional lightweight build removes all red-wave rendering.
-
-```sh
-./build.sh -o
-```
-
 Outputs:
 
 ```text
-./build.sh      -> 3ds-anmboot.firm
-./build.sh -o   -> 3ds-anmboot-o3ds.firm
-```
+./build.sh      -> 2ds-anmboot.firm
 
 `build.sh` regenerates both runtime animation banks from the canonical source assets before compiling:
 
