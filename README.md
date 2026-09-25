@@ -1,10 +1,10 @@
-# 3ds-anmboot
+# 2ds-anmboot
 
-Animated Nintendo 3DS software-launch logo boot wrapper with concurrent Luma3DS loading.
+Animated Nintendo 2DS software-launch logo boot wrapper with concurrent Luma3DS loading.
 
 ## Installation
 
-`3ds-anmboot` sits in front of Luma3DS. The SD card root `boot.firm` becomes 3ds-anmboot, while the original Luma3DS `boot.firm` is moved into `/anmboot/`.
+`2ds-anmboot` sits in front of Luma3DS. The SD card root `boot.firm` becomes 2ds-anmboot, while the original Luma3DS `boot.firm` is moved into `/anmboot/`.
 
 1. On the root of your 3DS SD card, create a folder named:
 
@@ -18,7 +18,7 @@ Animated Nintendo 3DS software-launch logo boot wrapper with concurrent Luma3DS 
    /anmboot/boot.firm
    ```
 
-3. Take the `3ds-anmboot.firm` from this release and rename it to:
+3. Take the `2ds-anmboot.firm` from this release and rename it to:
 
    ```text
    boot.firm
@@ -34,12 +34,12 @@ The final SD layout should look like this:
 
 ```text
 SD:/
-├── boot.firm              <- 3ds-anmboot (renamed from 3ds-anmboot.firm)
+├── boot.firm              <- 2ds-anmboot (renamed from 2ds-anmboot.firm)
 └── anmboot/
     └── boot.firm          <- original Luma3DS boot.firm
 ```
 
-On a normal boot, 3ds-anmboot plays the Nintendo 3DS launch animation while Luma3DS performs its ARM9-side startup work, then hands control over to Luma. Normal Luma boot-key behavior is preserved: when boot keys are held, the wrapper falls back to Luma's own ARM11 helper.
+On a normal boot, 2ds-anmboot plays the Nintendo 2DS launch animation while Luma3DS performs its ARM9-side startup work, then hands control over to Luma. Normal Luma boot-key behavior is preserved: when boot keys are held, the wrapper falls back to Luma's own ARM11 helper.
 
 ## Build
 
