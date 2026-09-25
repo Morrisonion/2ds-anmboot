@@ -29,10 +29,10 @@ $CLANG --target=arm-none-eabi -mcpu=mpcore -march=armv6k -nostdlib -fuse-ld=lld 
 if [[ "$MODE" == old3ds ]]; then
   python3 "$ROOT/tools/pack_firm.py" --arm9 "$ROOT/build/arm9.bin" --arm11 "$ROOT/build/arm11.bin" --arm11-addr 0x1FFB0000 \
     --data2 "$ROOT/arm11/three_bank.bin" --data2-addr 0x23100000 \
-    -o "$ROOT/3ds-anmboot-o3ds.firm"
+    -o "$ROOT/2ds-anmboot-o3ds.firm"
 else
   python3 "$ROOT/tools/pack_firm.py" --arm9 "$ROOT/build/arm9.bin" --arm11 "$ROOT/build/arm11.bin" --arm11-addr 0x1FFB0000 \
     --data "$ROOT/arm11/official_glow.bin" --data-addr 0x23000000 \
     --data2 "$ROOT/arm11/three_bank.bin" --data2-addr 0x23100000 \
-    -o "$ROOT/3ds-anmboot.firm"
+    -o "$ROOT/2ds-anmboot.firm"
 fi
